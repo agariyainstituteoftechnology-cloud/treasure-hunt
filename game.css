@@ -1,0 +1,448 @@
+/* 🎨 BASIC THEME VARIABLES - Ye colors aur transparency variables define karte hain */
+:root {
+  --bg-0: #06060a; /* Background ka primary color */
+  --bg-1: #071126; /* Background ka secondary color */
+  --accent: #4dd2ff; /* Highlight ya accent color */
+  --muted: #9aa4b2; /* Text ya muted elements ka color */
+  --glass: rgba(255, 255, 255, 0.04); /* Glass effect transparency */
+}
+
+/* ✨ BASIC RESET - Saare elements ka box-sizing set karte hain */
+* {
+  box-sizing: border-box; /* Padding aur border ko element ke size me include karte hain */
+}
+
+/* 🌌 BODY STYLE - Main background aur layout */
+body {
+  margin: 0; /* Body ke default margin hata dena */
+  min-height: 100vh; /* Body ka minimum height full screen */
+  font-family: Poppins, system-ui, Segoe UI, Roboto; /* Font family define karna */
+  background: radial-gradient(
+    1200px 600px at 10% 10%, /* Radial gradient ka size aur position */
+    #071026 0%, /* Gradient start color */
+    var(--bg-0) 18%, /* Gradient mid color */
+    var(--bg-1) 60% /* Gradient end color */
+  );
+  color: #e6eef6; /* Default text color */
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Vertical center alignment */
+  justify-content: center; /* Horizontal center alignment */
+  padding: 25px; /* Body ke andar padding */
+  overflow: hidden; /* Scroll bar ko hide karte hain */
+}
+
+/* 💠 WELCOME, OVERLAY, AND FINAL WIN BOXES */
+#welcome-screen,
+#overlay,
+#finalWin {
+  text-align: center; /* Text ko center align karna */
+  background: rgba(255, 255, 255, 0.03); /* Semi-transparent background */
+  padding: 50px; /* Box ke andar padding */
+  border-radius: 20px; /* Rounded corners */
+  box-shadow: 0 25px 60px rgba(2, 6, 23, 0.6); /* Shadow effect */
+  width: 90%; /* Box width 90% */
+  max-width: 100%; /* Maximum width 100% */
+  animation: fadeIn 360ms ease; /* Fade-in animation apply karna */
+}
+
+/* 🎯 HEADINGS */
+#welcome-screen h1,
+#overlay h1,
+#finalWin h1 {
+  font-size: 3.5rem; /* Heading size */
+  color: var(--accent); /* Heading color accent variable se */
+  margin-bottom: 10px; /* Heading ke neeche space */
+}
+
+/* 📝 PARAGRAPHS */
+#welcome-screen p,
+#overlay p,
+#finalWin p {
+  color: var(--muted); /* Paragraph ka muted color */
+  margin-bottom: 35px; /* Paragraph ke neeche space */
+  font-size: 1.7rem; /* Paragraph font size */
+}
+
+/* 🔘 BUTTON STYLE */
+button {
+  border: 0; /* Button ka border hata dena */
+  background: linear-gradient(90deg, var(--accent), #2bbfff); /* Button gradient */
+  padding: 16px 25px; /* Button padding */
+  border-radius: 12px; /* Rounded corners */
+  font-weight: 700; /* Bold text */
+  color: #012; /* Text color */
+  cursor: pointer; /* Cursor pointer on hover */
+  font-size: 1.5rem; /* Font size */
+}
+
+/* 🚫 DISABLED BUTTON */
+button:disabled {
+  background: #999; /* Disabled color grey */
+  cursor: not-allowed; /* Cursor change for disabled */
+}
+
+/* ✨ FADE IN ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Start opacity 0 */
+    transform: translateY(12px); /* Start position neeche 12px */
+  }
+  to {
+    opacity: 1; /* End opacity 1 */
+    transform: translateY(0); /* End position original */
+  }
+}
+
+/* 🧭 SCROLLBAR STYLE (Light Blue) */
+#game-container {
+  display: none; /* Initially hide game container */
+  height: calc(100vh - 50px); /* Full height minus some space */
+  overflow: auto; /* Enable scroll */
+}
+
+/* Scrollbar track */
+#game-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05); /* Track color */
+  border-radius: 10px; /* Track rounded */
+}
+
+/* Scrollbar width */
+#game-container::-webkit-scrollbar {
+  width: 10px; /* Scrollbar width */
+}
+
+/* Scrollbar thumb */
+#game-container::-webkit-scrollbar-thumb {
+  border-radius: 10px; /* Thumb rounded */
+  background: linear-gradient(180deg, #9ff6ff, #4dd2ff, #2bbfff); /* Thumb gradient */
+}
+
+/* 🎮 GAME WRAPPER & HEADER */
+.wrap {
+  width: min(1180px, 95%); /* Wrapper width max 1180px ya 95% */
+  display: grid; /* Grid layout */
+  grid-template-columns: 1fr 360px; /* Two columns layout */
+  gap: 26px; /* Column gap */
+}
+
+header {
+  grid-column: 1/3; /* Header across both columns */
+  display: flex; /* Flex layout */
+  align-items: center; /* Vertical align center */
+  gap: 18px; /* Gap between items */
+}
+
+/* 🔷 GAME LOGO */
+.logo {
+  width: 72px; /* Logo width */
+  height: 72px; /* Logo height */
+  border-radius: 16px; /* Rounded corners */
+  background: linear-gradient(135deg, #9ff6ff, #4dd2ff); /* Gradient background */
+  display: flex; /* Flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  color: #012; /* Text color */
+  font-weight: 800; /* Bold */
+  font-size: 28px; /* Font size */
+}
+
+/* 🏷 HEADINGS & TEXT */
+h1 {
+  margin: 0; /* No margin */
+  font-size: 30px; /* Font size */
+  color: var(--accent); /* Heading color */
+}
+
+p.lead {
+  margin: 2px 0 0; /* Margin top 2px */
+  color: var(--muted); /* Text color muted */
+  font-size: 15px; /* Font size */
+}
+
+/* 🧩 GAME BOARD */
+.board {
+  background: rgba(255, 255, 255, 0.02); /* Board transparency */
+  border-radius: 18px; /* Rounded corners */
+  padding: 20px; /* Padding */
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.6); /* Shadow */
+}
+
+/* 🕹 LEVEL INFO AREA */
+.meta {
+  display: flex; /* Flex layout */
+  justify-content: space-between; /* Space between items */
+  align-items: center; /* Vertical center align */
+}
+
+/* Level badge */
+.level-badge {
+  display: flex; /* Flex layout */
+  gap: 10px; /* Gap between elements */
+  align-items: center; /* Vertical center align */
+  background: var(--glass); /* Glass effect background */
+  padding: 8px 12px; /* Padding */
+  border-radius: 12px; /* Rounded corners */
+}
+
+.level-title {
+  font-weight: 700; /* Bold text */
+  color: #e6fff8; /* Text color */
+  font-size: 14px; /* Font size */
+}
+
+.level-emoji {
+  font-size: 20px; /* Emoji size */
+}
+
+/* 🧱 GRID CELLS */
+#grid {
+  margin-top: 16px; /* Margin top */
+  display: grid; /* Grid layout */
+  gap: 14px; /* Gap between cells */
+  justify-content: center; /* Center align horizontally */
+  padding: 12px; /* Padding */
+}
+
+.cell {
+  width: 80px; /* Cell width */
+  height: 80px; /* Cell height */
+  border-radius: 50%; /* Circle shape */
+  cursor: pointer; /* Cursor pointer */
+  overflow: hidden; /* Overflow hidden */
+  background: #111; /* Background color */
+  display: flex; /* Flex layout */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  transition: transform 0.18s ease, box-shadow 0.25s ease, opacity 0.25s ease; /* Smooth transition */
+}
+
+.cell:hover {
+  transform: scale(1.05); /* Hover enlarge effect */
+}
+
+.cell img {
+  width: 100%; /* Full width image */
+  height: 100%; /* Full height image */
+  object-fit: contain; /* Maintain aspect ratio */
+  transition: transform 0.3s ease; /* Smooth transform */
+}
+
+/* 💡 HINT GLOW EFFECT */
+.hint-glow {
+  box-shadow: 0 0 20px 6px rgba(77, 210, 255, 0.35); /* Glow effect */
+  transform: scale(1.08); /* Slight enlarge */
+}
+
+/* 📋 RIGHT PANEL - Stats and Controls */
+.panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)); /* Panel background */
+  border-radius: 18px; /* Rounded corners */
+  padding: 18px; /* Padding */
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.6); /* Shadow */
+  height: min-content; /* Minimum height to fit content */
+}
+
+/* 📊 GAME STATS */
+.stats {
+  display: flex; /* Flex layout */
+  gap: 10px; /* Gap between stat cards */
+  margin-bottom: 12px; /* Margin bottom */
+}
+
+.stat-card {
+  flex: 1; /* Equal width */
+  background: var(--glass); /* Glass effect background */
+  padding: 10px 12px; /* Padding */
+  border-radius: 10px; /* Rounded corners */
+  text-align: center; /* Center text */
+}
+
+.stat-card h3 {
+  margin: 0; /* No margin */
+  color: var(--accent); /* Accent color */
+  font-size: 15px; /* Font size */
+}
+
+/* 🎛 CONTROL BUTTONS */
+.controls {
+  display: flex; /* Flex layout */
+  flex-direction: column; /* Column direction */
+  gap: 10px; /* Gap between buttons */
+  margin-top: 8px; /* Margin top */
+}
+
+.btn {
+  border: 0; /* No border */
+  padding: 12px; /* Padding */
+  border-radius: 12px; /* Rounded corners */
+  font-weight: 700; /* Bold text */
+  cursor: pointer; /* Cursor pointer */
+  font-size: 14px; /* Font size */
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45); /* Shadow */
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, var(--accent), #2bbfff); /* Primary gradient */
+  color: #012; /* Text color */
+}
+
+.btn.ghost {
+  background: transparent; /* Transparent background */
+  color: var(--muted); /* Muted color */
+  border: 1px solid rgba(255, 255, 255, 0.04); /* Border */
+}
+
+/* 📈 PROGRESS BAR */
+.progress-wrap {
+  margin: 12px 0; /* Margin vertical */
+  background: #0b1220; /* Progress bar background */
+  height: 12px; /* Height */
+  border-radius: 12px; /* Rounded corners */
+  overflow: hidden; /* Overflow hidden */
+}
+
+.progress-fill {
+  height: 100%; /* Fill height */
+  width: 0%; /* Initial fill width */
+  background: linear-gradient(90deg, #9ff6ff, #4dd2ff); /* Fill gradient */
+  transition: width 0.7s ease; /* Smooth fill animation */
+}
+
+/* 💬 HINT TEXT */
+.hint {
+  color: var(--accent); /* Hint text color */
+  font-weight: 700; /* Bold */
+  margin-top: 8px; /* Margin top */
+  font-size: 13px; /* Font size */
+}
+
+/* 🪶 ACTIVITY LOG BOX */
+.log {
+  margin-top: 10px; /* Margin top */
+  background: rgba(255, 255, 255, 0.02); /* Background transparency */
+  padding: 10px; /* Padding */
+  border-radius: 10px; /* Rounded corners */
+  color: var(--muted); /* Text color */
+  min-height: 72px; /* Minimum height */
+  font-size: 13px; /* Font size */
+}
+
+/* 🌟 OVERLAY (Win/Level Complete) */
+#overlay {
+  position: fixed; /* Fixed position */
+  top: 0; /* Top zero */
+  left: 0; /* Left zero */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background: rgba(0, 0, 0, 0.95); /* Overlay color */
+  display: none; /* Initially hidden */
+  flex-direction: column; /* Flex column */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  z-index: 9999; /* Top layer */
+}
+
+#overlay .box {
+  max-width: 700px; /* Max width */
+  width: 90%; /* Width */
+  padding: 60px 40px; /* Padding */
+  border-radius: 20px; /* Rounded corners */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)); /* Gradient */
+  text-align: center; /* Center text */
+  box-shadow: 0 0 80px rgba(77, 210, 255, 0.3); /* Shadow */
+}
+
+#overlay .box h1 {
+  font-size: 3rem; /* Font size */
+  color: var(--accent); /* Text color */
+  margin-bottom: 20px; /* Margin bottom */
+}
+
+#overlay .box p {
+  color: var(--muted); /* Text color */
+  font-size: 1.2rem; /* Font size */
+  margin-bottom: 28px; /* Margin bottom */
+}
+
+/* ⏳ COUNTDOWN TIMER */
+#countdown {
+  position: fixed; /* Fixed position */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Exact center */
+  font-size: 92px; /* Font size */
+  font-weight: 900; /* Bold */
+  color: var(--accent); /* Color */
+  display: none; /* Initially hidden */
+  z-index: 998; /* Layer below overlay */
+}
+
+/* 🏆 FINAL WIN SCREEN */
+#finalWin {
+  display: none; /* Initially hidden */
+  position: fixed; /* Fixed position */
+  top: 0; /* Top */
+  left: 0; /* Left */
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background: radial-gradient(circle at top, rgba(77, 210, 255, 0.15), rgba(0, 0, 0, 0.95)); /* Background gradient */
+  z-index: 10000; /* Top layer */
+  flex-direction: column; /* Column layout */
+  justify-content: center; /* Vertical center */
+  align-items: center; /* Horizontal center */
+}
+
+#finalWin h1 {
+  font-size: 3rem; /* Font size */
+  color: #9ff6ff; /* Text color */
+  text-shadow: 0 0 18px rgba(77, 210, 255, 0.7); /* Glow effect */
+}
+
+#finalWin p {
+  font-size: 1.4rem; /* Font size */
+  color: var(--muted); /* Text color */
+}
+
+#finalWin button {
+  margin-top: 30px; /* Margin top */
+  font-size: 1.2rem; /* Font size */
+  background: linear-gradient(90deg, #4dd2ff, #2bbfff); /* Button gradient */
+  color: #012; /* Text color */
+  padding: 14px 24px; /* Padding */
+  border-radius: 14px; /* Rounded corners */
+  font-weight: 800; /* Bold text */
+  cursor: pointer; /* Cursor pointer */
+}
+
+/* 🎉 CONFETTI EFFECT */
+.confetti {
+  position: fixed; /* Fixed position */
+  width: 10px; /* Width */
+  height: 10px; /* Height */
+  background: var(--accent); /* Color */
+  top: 0; /* Start top */
+  animation: fall 3s linear forwards; /* Fall animation */
+}
+
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg); /* Falling and rotating */
+    opacity: 0; /* Fade out */
+  }
+}
+
+/* 📱 RESPONSIVE DESIGN */
+@media (max-width: 900px) {
+  .wrap {
+    grid-template-columns: 1fr; /* Single column on small screens */
+  }
+
+  .panel {
+    order: 99; /* Move panel at bottom */
+  }
+
+  header {
+    grid-column: 1/2; /* Header span single column */
+  }
+}

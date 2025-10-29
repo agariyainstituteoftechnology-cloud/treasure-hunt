@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"> <!-- Page ka character set define kar rahe hain -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile responsive meta tag -->
+  <title>🎊 Victory Screen 👑</title> <!-- Page ka title -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery include kar rahe hain -->
+
+  <style>
+    /* 🌈 CSS Variables */
+    :root {
+      --blue: #4dd2ff;  /* Primary blue color for texts aur highlights */
+      --bg: #0b132b;    /* Background base color */
+      --text: #ffffff;  /* Main text color */
+    }
+
+    /* 🏠 BODY STYLE */
+    body {
+      margin: 0; /* Default margin remove kar rahe hain */
+      font-family: 'Poppins', sans-serif; /* Font set kar rahe hain */
+      background: radial-gradient(circle at center, #081630, #040714 80%); /* Gradient background */
+      color: var(--text); /* Default text color */
+      display: flex; /* Flexbox layout */
+      justify-content: center; /* Horizontal center */
+      align-items: center; /* Vertical center */
+      height: 100vh; /* Full viewport height */
+      overflow: hidden; /* Scroll bar remove */
+    }
+
+    /* 📦 CONTAINER FOR CONTENT */
+    .container {
+      text-align: center; /* Center text */
+      position: relative; /* Position relative for z-index */
+      z-index: 10; /* Higher than confetti canvas */
+    }
+
+    /* ✨ Congrats Text Style */
+    .congrats {
+      font-size: 3.3rem; /* Large text */
+      font-weight: 700; /* Bold text */
+      letter-spacing: 0.5px; /* Space between letters */
+      margin-bottom: 15px; /* Bottom spacing */
+      display: flex; /* Flexbox for emoji + text + emoji */
+      align-items: center; /* Vertically center items */
+      justify-content: center; /* Horizontally center items */
+      gap: 10px; /* Space between emoji and text */
+    }
+
+    /* 📝 Text color and shadow for congrats */
+    .congrats-text {
+      color: var(--blue); /* Blue color */
+      text-shadow: 0 0 8px rgba(77,210,255,0.5); /* Glow effect */
+      font-weight: 600; /* Slightly less bold than container */
+    }
+
+    /* 🎉 Emoji style */
+    .emoji {
+      font-size: 2.6rem; /* Emoji size */
+      color: #fff; /* White color */
+      text-shadow: none; /* No shadow */
+    }
+
+    /* 🏆 Win message below congrats */
+    .win-message {
+      font-size: 1.6rem; /* Medium size */
+      color: #e6f0ff; /* Light blue color */
+      text-shadow: 0 0 6px rgba(200,220,255,0.3); /* Slight glow */
+      animation: fadeIn 2s ease-in forwards; /* Fade in animation */
+      opacity: 0; /* Start invisible */
+      margin-bottom: 25px; /* Bottom spacing */
+    }
+
+    /* ✨ Button style */
+    button {
+      background: linear-gradient(90deg, #33cfff, #4dd2ff); /* Gradient background */
+      color: black; /* Text color */
+      border: none; /* No border */
+      padding: 16px 28px; /* Padding */
+      font-size: 1.1rem; /* Font size */
+      border-radius: 10px; /* Rounded corners */
+      cursor: pointer; /* Pointer cursor */
+      transition: 0.3s; /* Smooth transition */
+      box-shadow: 0 0 12px rgba(77,210,255,0.5); /* Glow shadow */
+    }
+
+    /* Hover effect for button */
+    button:hover {
+      background: linear-gradient(90deg, #1acfff, #66e0ff); /* Slightly different gradient */
+      box-shadow: 0 0 20px rgba(100,230,255,0.7); /* Stronger shadow */
+      transform: scale(1.05); /* Slight zoom */
+    }
+
+    /* ✨ Fade-in animation */
+    @keyframes fadeIn {
+      to { opacity: 1; } /* End state of animation */
+    }
+
+    /* 🎨 Canvas for confetti */
+    canvas {
+      position: fixed; /* Fixed position */
+      top: 0; /* Top 0 */
+      left: 0; /* Left 0 */
+      pointer-events: none; /* Clicks pass through */
+      z-index: 1; /* Behind container */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 📦 Container for all elements -->
+  <div class="container">
+    <!-- 🎉 Congrats text -->
+    <div class="congrats">
+      <span class="emoji">🎉</span> <!-- Left emoji -->
+      <span class="congrats-text">CONGRATULATIONS</span> <!-- Main text -->
+      <span class="emoji">🎉</span> <!-- Right emoji -->
+    </div>
+
+    <!-- 🏆 Win message below congrats -->
+    <div class="win-message">🏆 You Completed All Levels Like a Champion!</div>
+
+    <!-- 🔘 Play Again button -->
+    <button id="playAgain">Play Again</button>
+  </div>
+
+  <!-- 🎊 Canvas for confetti animation -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <script>
+    // 🖌 Canvas setup
+    const canvas = document.getElementById("confettiCanvas"); // Canvas element select
+    const ctx = canvas.getContext("2d"); // 2D drawing context
+    let confetti = []; // Array to store confetti particles
+
+    // 🔄 Resize canvas on window resize
+    function resizeCanvas() {
+      canvas.width = window.innerWidth; // Full width
+      canvas.height = window.innerHeight; // Full height
+    }
+    window.addEventListener("resize", resizeCanvas); // Resize listener
+    resizeCanvas(); // Initial resize
+
+    // 🎉 Initialize confetti particles
+    function initConfetti() {
+      confetti = []; // Clear array
+      for (let i = 0; i < 100; i++) { // 100 particles
+        confetti.push({
+          x: Math.random() * canvas.width, // Random X position
+          y: Math.random() * -canvas.height, // Random Y above canvas
+          r: Math.random() * 6 + 4, // Random radius
+          color: Math.random() < 0.5 ? "#4dd2ff" : "#ffffff", // Blue or white
+        });
+      }
+    }
+
+    // 🖌 Draw confetti on canvas
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+      for (const c of confetti) { // Loop all particles
+        ctx.beginPath(); // Start path
+        ctx.fillStyle = c.color; // Set color
+        ctx.arc(c.x, c.y, c.r, 0, 2 * Math.PI); // Draw circle
+        ctx.fill(); // Fill circle
+      }
+      updateConfetti(); // Update positions
+    }
+
+    // 🔄 Update confetti positions
+    function updateConfetti() {
+      for (const c of confetti) { // Loop particles
+        c.y += 2; // Fall down
+        if (c.y > canvas.height) { // If below screen
+          c.y = -10; // Reset above canvas
+          c.x = Math.random() * canvas.width; // Random X
+        }
+      }
+    }
+
+    // 🔄 Animation loop
+    function animateConfetti() {
+      drawConfetti(); // Draw frame
+      requestAnimationFrame(animateConfetti); // Loop
+    }
+
+    initConfetti(); // Initialize particles
+    animateConfetti(); // Start animation
+
+    // 🔘 Play Again button click
+    $("#playAgain").on("click", function() {
+      window.location.href = "gameth.html"; // Redirect to game page
+    });
+  </script>
+</body>
+</html>

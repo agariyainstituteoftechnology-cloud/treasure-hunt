@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /> <!-- Page character encoding set kiya -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" /> <!-- Responsive viewport -->
+  <title>💠 Treasure Hunt — Light Blue Edition</title> <!-- Page title -->
+  <link rel="stylesheet" href="game.css"> <!-- External CSS link kiya -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery library include kiya -->
+</head>
+<body>
+
+  <!-- WELCOME SCREEN SECTION -->
+  <div id="welcome-screen"> <!-- Welcome screen container -->
+    <h1>🎮 Welcome to the Treasure Hunt!</h1> <!-- Main heading -->
+    <p>Find the hidden gold among the treasure chests!</p> <!-- Intro text -->
+    <button id="enterBtn">Start Game</button> <!-- Button to enter game -->
+  </div>
+
+  <!-- COUNTDOWN DISPLAY -->
+  <div id="countdown"></div> <!-- Countdown number show hoga yahan -->
+
+  <!-- OVERLAY SECTION (LEVEL COMPLETE / GAME OVER) -->
+  <div id="overlay"> <!-- Overlay container -->
+    <div class="box"> <!-- Box inside overlay -->
+      <h1 id="overlayTitle">GAME OVER</h1> <!-- Overlay heading -->
+      <p id="overlayMsg">You ran out of moves!</p> <!-- Overlay message -->
+      <div style="display:flex;gap:12px;justify-content:center;"> <!-- Button wrapper flex -->
+        <button id="overlayPrimaryBtn">Next Level</button> <!-- Overlay main button -->
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL WIN SCREEN -->
+  <div id="finalWin"> <!-- Final win container -->
+    <h1>🎉 Congratulations!</h1> <!-- Win heading -->
+    <p>You Win All Levels!</p> <!-- Win message -->
+    <button id="playAgainBtn">Play Again</button> <!-- Play again button -->
+  </div>
+
+  <!-- MAIN GAME CONTAINER -->
+  <div id="game-container"> <!-- Hidden initially -->
+    <div class="wrap"> <!-- Main wrapper for grid + panel -->
+      
+      <!-- HEADER WITH LOGO AND TITLE -->
+      <header> <!-- Header container -->
+        <div class="logo">TH</div> <!-- Game logo -->
+        <div> <!-- Header text wrapper -->
+          <h1>Treasure Hunt — Image Edition</h1> <!-- Game title -->
+          <p class="lead">Now with light-blue theme and improved flow!</p> <!-- Subtitle -->
+        </div>
+      </header>
+
+      <!-- GAME BOARD SECTION -->
+      <section class="board"> <!-- Board wrapper -->
+        <div class="meta"> <!-- Level info + timer wrapper -->
+          <div class="level-badge"> <!-- Level badge container -->
+            <div class="level-emoji" id="levelEmoji">🌿</div> <!-- Level emoji -->
+            <div class="level-title" id="levelTitle">Level 1/3 — Easy</div> <!-- Level text -->
+          </div>
+          <div style="text-align:right;"> <!-- Timer container -->
+            <div style="font-size:12px;color:var(--muted)">Time</div> <!-- Timer label -->
+            <div id="timeStat" style="font-weight:800">60s</div> <!-- Time left display -->
+          </div>
+        </div>
+        <div id="grid"></div> <!-- Grid of treasure cells will appear here -->
+      </section>
+
+      <!-- RIGHT PANEL / CONTROLS -->
+      <aside class="panel"> <!-- Panel container -->
+        <div style="display:flex; justify-content:space-between;"> <!-- Panel header flex -->
+          <div style="font-weight:800; color:var(--accent)">Controls</div> <!-- Panel heading -->
+          <div id="levelShort" style="color:var(--muted); font-size:13px">1/3</div> <!-- Short level text -->
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div class="progress-wrap">
+          <div class="progress-fill" id="progressFill"></div> <!-- Progress fill element -->
+        </div>
+
+        <!-- GAME STATS -->
+        <div class="stats"> <!-- Stats wrapper -->
+          <div class="stat-card">
+            <div style="font-size:12px;color:var(--muted)">Moves</div> <!-- Moves label -->
+            <h3 id="movesCard">0/0</h3> <!-- Moves count -->
+          </div>
+          <div class="stat-card">
+            <div style="font-size:12px;color:var(--muted)">Hints</div> <!-- Hints label -->
+            <h3 id="hintsCard">2</h3> <!-- Hints count -->
+          </div>
+        </div>
+
+        <!-- CONTROL BUTTONS -->
+        <div class="controls"> <!-- Buttons wrapper -->
+          <button class="btn primary" id="startBtn">Start Level</button> <!-- Start level -->
+          <button class="btn ghost" id="hintBtn">Smart Hint</button> <!-- Hint button -->
+          <button class="btn ghost" id="revealBtn">Reveal</button> <!-- Reveal treasure -->
+          <button class="btn ghost" id="resetBtn">Reset</button> <!-- Reset level -->
+        </div>
+
+        <!-- HINT DISPLAY -->
+        <div class="hint" id="hintBox">Hint: —</div> <!-- Hint text -->
+
+        <!-- ACTIVITY LOG -->
+        <div class="log" id="log">Press <strong>Start Level</strong> to begin your hunt.</div> <!-- Logs messages -->
+
+      </aside>
+    </div>
+  </div>
+
+  <!-- JS FILE LINK -->
+  <script src="game.js"></script> <!-- Game logic JavaScript -->
+</body>
+</html>
