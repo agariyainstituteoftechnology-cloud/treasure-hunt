@@ -1,4 +1,4 @@
-// 🎯 Treasure Hunt — Short & Easy Version
+// 🎯 Treasure Hunt — Short & Easy Version (Centered Overlay Fix)
 
 // 🔹 Images & Levels
 const img = { closed:"images/close-box.jpg", empty:"images/empty-box.jpg", treasure:"images/win.jpg" };
@@ -25,6 +25,15 @@ const renderBadge = lv => {
   $levelEmoji.text(l.emoji); $levelTitle.text(`Level ${lv}/3 — ${l.name}`);
   $levelShort.text(`${lv}/3`); $progress.css("width",`${(lv/3)*100}%`);
 };
+
+// ✅ Overlay center implementation
+function showOverlay(){
+  $overlay.css({
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center"
+  }).fadeIn(200);
+}
 
 // 🔹 Grid
 function createGrid(cols,total){
@@ -103,13 +112,16 @@ function endRound(msg,title,win=false,fail=false){
   if(win&&level===3) return showWin();
   $oTitle.text(title||"Game Over"); $oMsg.text(msg||"");
   $oBtn.text(win?(level<3?"Next Level":"Play Again"):fail?"Restart Game":"Restart Game");
-  $overlay.show();
+  showOverlay();
 }
 
 // 🔹 Final Win
 function showWin(){
   $("#finalWin").show();
-  for(let i=0;i<80;i++) $("<div>").addClass("confetti").css({left:`${Math.random()*100}%`,background:`hsl(${Math.random()*360},100%,60%)`,animationDelay:`${Math.random()*2}s`}).appendTo("body").delay(4000).queue(next=>{$(this).remove();next();});
+  for(let i=0;i<80;i++) $("<div>").addClass("confetti")
+    .css({left:`${Math.random()*100}%`,background:`hsl(${Math.random()*360},100%,60%)`,
+    animationDelay:`${Math.random()*2}s`})
+    .appendTo("body").delay(4000).queue(next=>{$(this).remove();next();});
   window.location.href="winner.html";
 }
 
