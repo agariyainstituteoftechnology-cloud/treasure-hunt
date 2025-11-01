@@ -15,122 +15,122 @@ const levels = {
 };
 
 // 🔹 Game ki current state
-let currentLevel = 1,          // Current level → start me level 1
-    treasureIndex = null,      // Treasure ka index → abhi null hai, level start hone pe set hoga
-    moves = 0,                 // Player ke moves → start me 0
-    moveLimit = 0,             // Max moves allowed for current level
-    timeLeft = 60,             // Time left in seconds → default 60
-    hintsLeft = 2,             // Player ke hints → start me 2
-    started = false,           // Game start hua ya nahi → false
-    timerId = null;            // Timer ID → setInterval ka reference store hoga
+let currentLevel = 1,          // let ka matlab hai ye variable hai jo future me change ho sakta hai,currentLevel = 1 → Game abhi level 1 pe start ho raha hai.
+    treasureIndex = null,      // treasureIndex variable treasure ki position ko store karega, null ka matlab abhi koi treasure set nahi hua.
+    moves = 0,                 // moves variable track karega ke player ab tak kitni moves kar chuka hai , Start me ye 0 hai.
+    moveLimit = 0,             // moveLimit me store hoga maximum moves allowed for current level, Abhi 0, game start hone ke baad update hoga.
+    timeLeft = 60,             // timeLeft variable me level complete karne ka remaining time store hota hai , Start me 60 seconds.
+    hintsLeft = 2,             // hintsLeft variable me player ke paas remaining hints store honge , Start me 2 hints.
+    started = false,           // started boolean variable hai , Ye check karega ke game shuru hua ya nahi , Start me false, jab player start karega to true hoga.
+    timerId = null;            // timerId me setInterval ya setTimeout ka ID store hota hai , Ye timer ko later stop ya clear karne ke kaam aayega.
 
 // 🔹 jQuery shortcuts → frequently use hone wale elements
-const $grid = $("#grid"),                  // Grid container element
-      $levelTitle = $("#levelTitle"),      // Level title display
-      $levelEmoji = $("#levelEmoji"),      // Level emoji display
+const $grid = $("#grid"),                  // $grid variable me HTML element jiska id="grid" hai, wo store ho gaya , Ye container hai jahan sab treasure boxes (chests) dikhaye jayenge.
+      $levelTitle = $("#levelTitle"),      // Ye element game ke level ka title (Easy, Medium, Hard) show karega.
+      $levelEmoji = $("#levelEmoji"),      // Ye level ke title ke sath ek emoji dikhata hai — jaise 😎, 😰, 💀 etc.
       $levelShort = $("#levelShort"),      // Short text → 1/3 etc
-      $progressFill = $("#progressFill"),  // Progress bar fill element
-      $timeStat = $("#timeStat"),          // Time left display
-      $hintBox = $("#hintBox"),            // Hint message display
-      $log = $("#log"),                    // Bottom log → messages show karne ke liye
-      $movesCard = $("#movesCard"),        // Moves count display
-      $hintsCard = $("#hintsCard"),        // Hints count display
-      $hintBtn = $("#hintBtn"),            // Hint button
+      $progressFill = $("#progressFill"),  // Ye progress bar ka fill part hai — ye batata hai kitni progress hui hai.
+      $timeStat = $("#timeStat"),          // Ye element game ka timer dikhata hai — time remaining ya time passed.
+      $hintBox = $("#hintBox"),            // Ye box me hint text show hota hai — jaise “Treasure near left side”.
+      $log = $("#log"),                    // Ye area me game log messages show hote hain — jaise “You found empty box”.
+      $movesCard = $("#movesCard"),        // Ye card game me moves (kitne attempts bache hain) dikhata hai.
+      $hintsCard = $("#hintsCard"),        // Ye card hints ke count (kitne hints bache hain) show karta hai.
+      $hintBtn = $("#hintBtn"),            // Ye button hai jisse player hint mang sakta hai.
       $countdown = $("#countdown"),        // Countdown display
-      $overlay = $("#overlay"),            // Overlay container → next level / restart
-      $overlayTitle = $("#overlayTitle"),  // Overlay title text
-      $overlayMsg = $("#overlayMsg"),      // Overlay message text
-      $overlayPrimaryBtn = $("#overlayPrimaryBtn"); // Overlay main button
+      $overlay = $("#overlay"),            // Ye overlay screen hai jo win ya lose hone ke baad appear hoti hai.
+      $overlayTitle = $("#overlayTitle"),  // Ye overlay ke upar likha title show karta hai — jaise “You Win!” ya “Game Over!”
+      $overlayMsg = $("#overlayMsg"),      // Ye overlay me extra message show karta hai — jaise “Better luck next time!”
+      $overlayPrimaryBtn = $("#overlayPrimaryBtn"); // Ye overlay me main button hai — jaise “Play Again” ya “Next Level”.
 
 // 🔹 Log update → bottom log me message update karne ke liye
-const log = txt => $log.html(txt); 
+const log = txt => $log.html(txt); // Ye ek arrow function hai jiska naam log hai , txt ek parameter hai — matlab jab bhi ye function call hoga, hum ek text (message) pass karenge , $log.html(txt) ka matlab hai: $log (jo upar wale code me $("#log") se link hai) uske andar ka HTML change karke wo message text show kar do.
 
 // 🔹 UI update → moves, hints aur time ko UI me update karna
-const updateUI = () => {
-    $movesCard.text(`${moves}/${moveLimit}`); // Moves card update
-    $timeStat.text(`${timeLeft}s`);           // Time left update
-    $hintsCard.text(hintsLeft);               // Hints left update
+const updateUI = () => {        // Ye ek function hai jiska naam updateUI hai.
+    $movesCard.text(`${moves}/${moveLimit}`); // Ye line moves counter ko update karti hai.
+    $timeStat.text(`${timeLeft}s`);           // Ye line timer display ko update karti hai.
+    $hintsCard.text(hintsLeft);               // Ye line hints counter update karti hai.
 };
 
 // 🔹 Level Badge → top me level ka badge update karna
-function renderLevelBadge(lv){
-    const c = levels[lv];                     // Current level config fetch
-    $levelEmoji.text(c.emoji);               // Emoji update
-    $levelTitle.text(`Level ${lv}/3 — ${c.name}`); // Level title update
-    $levelShort.text(`${lv}/3`);             // Short text update
-    $progressFill.css("width",`${(lv/3)*100}%`); // Progress bar update
+function renderLevelBadge(lv){           // Ye ek arrow function hai jiska naam renderLevelBadge hai.
+    const c = levels[lv];    // Ye line current level ka data levels object se nikalti hai , Matlab — levels ek object hai jisme har level ka setup (jaise moves, hints, emoji, name, etc.) store hai , Ab c me wo specific level ka config aa gaya jise ab hum screen pe dikhayenge.
+    $levelEmoji.text(c.emoji);   // Ye line screen pe emoji update karti hai , Jo emoji levels object me defined hai (jaise 😃, 😰, 💀), wo display ho jata hai current level ke sath.
+    $levelTitle.text(`Level ${lv}/3 — ${c.name}`); // Ye line screen pe full level title likh deti hai , 
+    $levelShort.text(`${lv}/3`);             // Ye short version dikhata hai — sirf numbers me , 2/3 (matlab level 2 of 3).
+    $progressFill.css("width",`${(lv/3)*100}%`); // Ye line progress bar ki width set karti hai taake ye visually bataye player kis level tak pahunch gaya hai.
 }
 
 // 🔹 Grid → level ke liye cells create karna
-function createGrid(cols, total){
-    $grid.empty();                            // Pehle ka grid clear karo
-    $grid.css("grid-template-columns",`repeat(${cols},80px)`); // Column width set
-    for(let i=0;i<total;i++){                 // Loop to create each cell
-        const $cell = $("<div>",{class:"cell","data-i":i}); // Cell div with index
-        const $img = $("<img>",{src:img.closed, alt:"chest"}); // Closed chest image
-        $cell.append($img);                  // Image ko cell me add karo
-        $cell.on("click", onCellClick);     // Click event attach karo
+function createGrid(cols, total){      // Ye ek arrow function hai jiska naam createGrid hai , Ye do parameters leta hai: cols → grid me kitne columns hone chahiye (jaise 4 columns) , total → total kitne boxes (cells) banane hain (jaise 12 chests)
+    $grid.empty().css("grid-template-columns", `repeat(${cols},80px)`); // Ye line do kaam karti hai: .empty() → purani grid ko clear karta hai (agar pehle se boxes hain to hata deta hai) , .css("grid-template-columns", ... ) → naya layout set karta hai, jisme columns ki ginti cols ke barabar hoti hai.
+    for(let i=0;i<total;i++){      // Ye loop har ek box (cell) ke liye chal raha hai , Matlab agar total = 12, to ye loop 12 baar chalega — aur har baar ek naya cell (box) banayega.
+        const $cell = $("<div>",{class:"cell","data-i":i}); // Ye line ek naya <div> element banata hai jiska: class = "cell" → CSS styling ke liye , "data-i": i → har cell ko ek unique number deta hai (index)
+        const $img = $("<img>",{src:img.closed, alt:"chest"}); // Is line me cell ke andar ek image lagayi jati hai , src: img.closed → matlab closed chest wali image (band box) , alt: "chest" → alternative text accessibility ke liye.
+        $cell.append($img);// Ye line bana hua <div> (cell) ko grid container ($grid) ke andar add kar deti hai., Matlab screen pe wo cell appear ho jata hai .
+        $cell.on("click", onCellClick);     // Ye har cell par click event listener lagata hai , Matlab jab user kisi box pe click karega, to function onCellClick chalega ,Ye function decide karega ke box khali hai ya treasure mila hai
         $grid.append($cell);                 // Cell ko grid me add karo
     }
 }
 
 // 🔹 Countdown → start hone se pehle 3-2-1 GO
-function showCountdown(cb){
-    let n=3;                                  // Countdown start value
-    $countdown.text(n).show();                // Show countdown
-    const cd = setInterval(()=>{              
-        n--;                                  // Decrement countdown
-        if(n>0) $countdown.text(n);           // Show number
+function showCountdown(cb){     // Ye ek arrow function hai jiska naam showCountdown hai , cb ka matlab callback function hai — jab countdown khatam ho jaye to ye function automatically chale ga
+    let n=3;                   // Yahan variable n ko 3 se start kiya gaya hai, matlab countdown 3 se shuru hoga:
+    $countdown.text(n).show();  // Ye line screen par countdown number 3 dikhata hai.
+    const cd = setInterval(()=>{  // setInterval() ek timer banata hai jo har 1 second (1000ms) me repeat hota hai , Iska kaam hai countdown ko har second update karna.
+        n--;                      // Decrement countdown
+        if(n>0) $countdown.text(n); // Agar n abhi bhi 0 se bada hai, toh screen par updated number dikhaya jata hai.
         else{
-            $countdown.text("GO");            // Last me GO
-            setTimeout(()=>{
-                clearInterval(cd);            // Interval stop
-                $countdown.hide();           // Countdown hide
-                cb();                         // Callback → start game
-            },700);
+            $countdown.text("GO");   // Jab n 0 ho jaye, tab screen par "GO" dikhaya jata hai.
+            setTimeout(()=>{        // setTimeout() ka matlab hai ke is block ka code thodi der baad chale.
+                clearInterval(cd);  // clearInterval(cd) → Ye countdown ka timer stop kar deta hai, taki number aur na gire.
+                $countdown.hide();  // Countdown ko screen se hide kar diya jata hai.
+                cb();         // Ye line callback function ko call karti hai, matlab game ya next action start ho jata hai.
+            },700);   //700 ms ka timeout, matlab "GO" 0.7 second dikhaye jaata hai fir hide hota hai.
         }
-    },1000);
+    },1000);   // 1000 ms ka interval, matlab har 1 second ye function repeat hota hai.
 }
 
 // 🔹 Prepare Level → level ready karna
-function prepareLevel(lv){
-    const c = levels[lv];                     // Current level config
-    createGrid(c.cols,c.boxes);               // Grid create karo
-    moves=0; moveLimit=c.moves; timeLeft=c.time; // Moves aur time reset
-    treasureIndex=Math.floor(Math.random()*c.boxes); // Random treasure select
-    started = false;                           // Game not started
+function prepareLevel(lv){   // Ye ek function hai jiska naam prepareLevel hai , lv matlab level number, yani kaunsa level start karna hai.
+    const c = levels[lv];    // levels ek object hai jisme har level ki settings (configuration) store hoti hain , c me current level ki config store kar di gayi hai.
+    createGrid(c.cols,c.boxes);    // createGrid() function game grid banata hai , c.cols → grid me columns ki number , c.boxes → total boxes ki number
+    moves=0; moveLimit=c.moves; timeLeft=c.time; // moves=0 → player ke moves reset kar diye gaye , moveLimit=c.moves → is level me maximum allowed moves set kiye gaye , timeLeft=c.time → is level me time limit set ki gayi.
+    treasureIndex=Math.floor(Math.random()*c.boxes); // Math.random()*c.boxes → 0 se boxes-1 tak random number generate karta hai , Math.floor() → decimal ko round down karta hai , Matlab treasure ka random box select kiya gaya hai.
+    started = false;                   // Game abhi start nahi hua, isliye started ko false set kiya.
 
     // Hint button enable/disable
-    $hintBtn.prop("disabled",hintsLeft<=0)
+    $hintBtn.prop("disabled",hintsLeft<=0)  // $hintBtn.prop("disabled",hintsLeft<=0) → Agar hintsLeft 0 ya usse kam hai, Hint button disable ho jaata hai , .css({...}) → Button ka style change hota hai: Agar hints bachi hain → background transparent, color muted , Agar hints khatam → background gray (#888), color dark (#222).
         .css({background:hintsLeft>0?"transparent":"#888", color:hintsLeft>0?"var(--muted)":"#222"});
 
-    $hintBox.text("Hint: —");                 // Hint box reset
-    $(".cell").removeClass("hint-glow").css("opacity","1"); // Previous hint glow remove
-    updateUI();                               // UI update
-    log(`Ready — Level ${lv}/3. Press Start Level to begin.`); // Log ready
+    $hintBox.text("Hint: —");    // Hint box ko reset kiya ja raha hai, abhi koi hint show nahi ho rahi.
+    $(".cell").removeClass("hint-glow").css("opacity","1"); // .cell ka previous hint glow remove kar diya , Saare cells ka opacity 1 set kar diya (normal brightness).
+    updateUI();         // updateUI() → Game ki screen/UI update karta hai, jaise moves, time, hints etc.
+    log(`Ready — Level ${lv}/3. Press Start Level to begin.`); // Console ya game log me message display hota hai: “Level ready hai, Start Level button press karo.”
 }
 
 // 🔹 Start Level
 function startLevel(){  // startLevel:function ka name hai .Is function ko Start Level button ya similar action pe call karenge.
-    if(!started){      // Agar started false hai (game abhi start nahi hua) → tabhi code execute hoga. Matlab multiple clicks se game dobara start nahi hoga.
+    if(!started){ // Agar started false hai (game abhi start nahi hua) → tabhi code execute hoga. Matlab multiple clicks se game dobara start nahi hoga.
         const c=levels[currentLevel]; // c → current level ka configuration fetch kiya levels object se.Example: Level 1 → { boxes: 12, cols: 4, moves: 4, ... }.
         moves=0; moveLimit=c.moves; timeLeft=c.time; // Moves reset → 0 , Maximum moves → level ke moves , Time left → level ka time
         treasureIndex=Math.floor(Math.random()*c.boxes); // Treasure ka random box choose kiya.
         log("Get ready..."); // Bottom log me "Get ready..." message show hoga.
         showCountdown(()=>{ // showCountdown() function call kiya → 3-2-1 countdown dikhega. ()=>{ ... } → ye callback function hai, jo countdown ke baad execute hoga.
-            started=true;                       // Game started
-            clearInterval(timerId);             // Clear previous timer
-            timerId = setInterval(()=>{         // Timer start
-                if(!started) return;           // Safety check
+            started=true;                       // Countdown ke baad game start ho jata hai.
+            clearInterval(timerId);             // Agar pehle ka timer chal raha tha, to usse stop kar diya.
+            timerId = setInterval(()=>{         // setInterval() → timer start hota hai jo har 1 second me repeat hota hai , timerId me store kiya, taki baad me stop kar sake.
+                if(!started) return;           // Safety check → Agar started false ho gaya (game stop hua), timer return kar dega.
                 timeLeft--;                    // Decrement time
-                $timeStat.text(`${timeLeft}s`); // Update UI
-                if(timeLeft<=0) endRound("⏰ Time's up!","Time Over",false,true); // Time over
-            },1000);
-            updateUI();                         // UI update
-            log(`🎯 Level ${currentLevel} started! Good luck.`); // Log start
+                $timeStat.text(`${timeLeft}s`); // Screen/UI par time update ho raha hai.
+                if(timeLeft<=0) endRound("⏰ Time's up!","Time Over",false,true); // Time over ,Agar time khatam ho gaya, to round end kar diya.
+            },1000);      //Timer har 1000ms (1 second) me repeat hota hai.
+            updateUI();   // Screen/UI ka status update hota hai (moves, hints, timer etc.)
+            log(`🎯 Level ${currentLevel} started! Good luck.`); // Log me message show hota hai → Level start ho gaya.
         });
     }
 }
+
 // 🔹 Cell Click
 function onCellClick(){      // onCellClick → function ka naam. ye function har cell click hone par call hota hai.
     if(!started) return log("⚠ Press Start Level first!"); //Agar game start nahi hua (started=false) → Player ko warning message show karo log me. return → function yahi terminate ho jata hai.
