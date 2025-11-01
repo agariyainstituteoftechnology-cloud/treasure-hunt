@@ -159,12 +159,12 @@ function useHint(){            // useHint → function ka naam. Ye function hint
     const c=levels[currentLevel], total=c.boxes, cols=c.cols, hintCount=c.hintArea; // c → current level ka config ,total → total boxes, cols → columns , hintCount → kitni boxes highlight karni hai (hint area)
     const tr=Math.floor(treasureIndex/cols), tc=treasureIndex%cols, indices=[];     // tr → treasure row index → treasureIndex ko cols se divide karke find kiya , tc → treasure column index → treasureIndex modulo cols , indices=[] → array jisme hint highlight ke indices store honge
     for(let d=0; indices.length<hintCount && d<=Math.max(cols,Math.ceil(total/cols)); d++) // Ye nested loops treasure ke aas paas ke cells select karte hain: d → distance from treasure , r, cc → row & column iterate karte hain , i=r*cols+cc → cell index calculate , if(i>=total) continue; → extra cells skip , if(Math.abs(r-tr)+Math.abs(cc-tc)===d) → Manhattan distance = d → indices me add karo , Stop loop jab indices.length >= hintCount
-        for(let r=0;r<Math.ceil(total/cols);r++)
-            for(let cc=0;cc<cols;cc++){
-                const i=r*cols+cc;
-                if(i>=total) continue;
-                if(Math.abs(r-tr)+Math.abs(cc-tc)===d) indices.push(i);
-                if(indices.length>=hintCount) break;
+        for(let r=0;r<Math.ceil(total/cols);r++) //.Ye outer loop hai — rows ke liye.
+            for(let cc=0;cc<cols;cc++){ // Ye inner loop hai — columns ke liye
+                const i=r*cols+cc; // Ye line har box ka unique index number nikalti hai.
+                if(i>=total) continue;  //Agar index i total boxes se zyada ho gaya, to skip (continue) kar do.
+                if(Math.abs(r-tr)+Math.abs(cc-tc)===d) indices.push(i); // Ye line hint distance check kar rahi hai
+                if(indices.length>=hintCount) break; //Agar required hint boxes mil gaye (hintCount ke barabar ya zyada),
             }
 
     $(".cell").removeClass("hint-glow").css("opacity","0.4"); // Pehle saare cells ka hint glow remove karo , Aur opacity ko 0.4 (dim) kar do
